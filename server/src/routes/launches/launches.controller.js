@@ -4,10 +4,15 @@ const {
   abortLaunchById,
   scheduleNewLaunch,
 } = require("../../models/lunches.model");
+const { getPagination } = require("../../services/query");
 
 async function httpGetAllLaunches(req, res) {
-  return res.status(200).json(await getAllLaunches());
+  console.log(req.query);
+  const { skip, limit } = getPagination(req.query);
+  const launches = await getAllLaunches(skip, limit);
+  return res.status(200).json(launches);
 }
+
 async function httpAddNewLuanch(req, res) {
   const launch = req.body;
   if (
