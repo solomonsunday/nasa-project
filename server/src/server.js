@@ -20,3 +20,7 @@ async function startServer() {
 }
 
 startServer();
+
+// ssh -i "nasa-project.pem" ec2-user@ec2-3-138-174-153.us-east-2.compute.amazonaws.com
+//NASA-PROJECT % docker build --platform linux/arm64 -t  chinoyerem/nasa-project:latest .  this was used to build for M1 chip
+//docker run --restart=always -p  8000:8000 chinoyerem/nasa-project
