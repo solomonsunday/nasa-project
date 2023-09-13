@@ -1,10 +1,12 @@
 const request = require("supertest");
 const app = require("../../app");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+const { loadPlanetData } = require("../../models/planets.model");
 
 describe("Launches Api", () => {
   beforeAll(async () => {
     await mongoConnect();
+    await loadPlanetData();
   });
   afterAll(async () => {
     await mongoDisconnect();
@@ -13,7 +15,7 @@ describe("Launches Api", () => {
   describe("Test GET /launches", () => {
     test("It should respond with 200 success", async () => {
       const response = await request(app)
-        .get("/launches")
+        .get("/v1/launches")
         .expect("Content-Type", /json/)
         .expect(200);
     });
@@ -41,7 +43,7 @@ describe("Launches Api", () => {
     };
     test("It should respond with 201 created", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(completeLaunchData)
         .expect("Content-Type", /json/)
         .expect(201);
@@ -56,7 +58,7 @@ describe("Launches Api", () => {
 
     test("It should catch missing required properties", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithoutDate)
         .expect("Content-Type", /json/)
         .expect(400);
@@ -67,7 +69,7 @@ describe("Launches Api", () => {
     });
     test("It should catch invalid dates", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithAnInvalidDate)
         .expect("Content-Type", /json/)
         .expect(400);
